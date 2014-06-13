@@ -149,7 +149,7 @@ class FirebaseClient {
 	// Return: (Guzzle) Response
 	// Args: (Guzzle) Response
 	private function validateResponse($response) {
-		if ($response->getStatusCode() === 200) {
+		if ($response->getStatusCode() == 200) {
 			return $response;
 		} else throw new \Exception('HTTP Error: '.$response->getReasonPhrase());
 	}
