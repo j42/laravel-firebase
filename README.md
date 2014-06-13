@@ -14,7 +14,7 @@ Then add the service providers and facades to `config/app.php`
 
 	'J42\LaravelFirebase\LaravelFirebaseServiceProvider',
 
-	...
+...
 
 	'Firebase'		  => 'J42\LaravelFirebase\LaravelFirebaseFacade'
 
