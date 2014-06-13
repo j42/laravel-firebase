@@ -51,7 +51,7 @@ class FirebaseClient {
 		}
 
 		// Process URL/Path
-		$url = (strpos($path, 'https://') < 0) ? $this->absolutePath($path) : $path;
+		$url = (strpos($args[0], 'https://') < 0) ? $this->absolutePath($args[0]) : $args[0];
 
 		if (count($args) < 3 && $func !== 'get') {
 			// Write Data
