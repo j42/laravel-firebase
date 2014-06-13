@@ -2,7 +2,7 @@
 
 class FirebaseToken {
 
-	// Returns: FirebaseToken
+	// Return: FirebaseToken
 	// Args: (string) $secret
 	public function __construct($secret) {
 		if (!is_string($secret)) throw new UnexpectedValueException('Secret must be a string.');
@@ -10,7 +10,7 @@ class FirebaseToken {
 	}
 
 
-	// Returns: (string) JSON Web Token
+	// Return: (string) JSON Web Token
 	// Args: (Array) $data, (Array) $options
 	/*	$options
 			[admin] Bypass all security rules? (Default: false)
@@ -45,7 +45,7 @@ class FirebaseToken {
 
 
 	// [STA]
-	// Returns: (Array) JSON Web Token Meta-Options
+	// Return: (Array) JSON Web Token Meta-Options
 	// Args: (Array) $config
 	private static function configure(Array $options) {
 		$claims = [];
@@ -79,7 +79,7 @@ class FirebaseToken {
 
 
 	// [STA]
-	// Returns: void
+	// Return: void
 	// Args: (int) $errno
 	private static function error($n) {
 

@@ -41,8 +41,7 @@ class LaravelFirebaseServiceProvider extends ServiceProvider {
 	 *
 	 * @return array
 	 */
-	public function provides()
-	{
+	public function provides() {
 		return ['firebase'];
 	}
 

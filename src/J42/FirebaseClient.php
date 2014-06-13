@@ -1,7 +1,5 @@
 <?php namespace J42\LaravelFirebase;
 
-
-
 class FirebaseClient {
 
 	# Properties
@@ -17,7 +15,8 @@ class FirebaseClient {
 	public function __construct(Array $config) {
 
 		// Valid host?
-		if (empty($config['host'])) throw new UnexpectedValueException('Please enter a valid Firebase host URL');
+		if (empty($config['host'])) throw new UnexpectedValueException('Please enter a valid Firebase host URL.');
+		if (strpos($config['host'], 'http://') > -1) throw new UnexpectedValueException('Please use HTTPS for all Firebase URLs.');
 
 		// Set Host URI
 		$this->setHost($config['host']);
@@ -50,16 +49,45 @@ class FirebaseClient {
 			case 'get': $requestType = 'GET'; break;
 		}
 
+		// Process URL/Path
+		$url = (strpos($path, 'https://') < 0) ? $this->absolutePath($path) : $path;
+
 		if (count($args) < 3 && $func !== 'get') {
 			// Write Data
-			$this->write($func, $args[1], $requestType);
+			$this->write($url, $args[1], $requestType);
 		} else {
 			// Read Data
-			$this->get($func);
+			$this->get($url);
 		}
 
 	}
-	public function set($path, $data) { return $this->writeData($path, $data) }
+
+
+	// Return: (Guzzle) Firebase Response
+	// Args: (string) $path
+	public function get($path) {
+		// Process Request
+		$request  = $this->http->createRequest('GET', $path);
+		$response = $this->http->send($request);
+		// Is Response Valid?
+		return $this->validateResponse($response)->getBody();
+	}
+
+
+	// Return: (Guzzle) Firebase Response
+	// Args: (string) $path, (Array) $data, (string) $method
+	public function write($path, Array $data, $method = 'PUT') {
+		// Sanity Checks
+		$json = json_encode($data);
+		if ($json === 'null') throw new UnexpectedValueException('HTTP Error: Invalid request (invalid JSON)');
+		// Process Request
+		$request  = $this->http->createRequest($method, $path, ['json' => $json]);
+		$request->setHeader('Content-Type', 'application/json');
+		$request->setHeader('Content-Length', strlen($json));
+		$response = $this->http->send($request);
+		// Is Response Valid?
+		return $this->validateResponse($response)->getBody();
+	}
 
 
 	// Return: void
@@ -103,6 +131,15 @@ class FirebaseClient {
 		$auth = (!empty($this->token)) ? '?'.http_build_query(['auth' => $this->token]) : '';
 
 		return $url.$path.'.json'.$auth;
+	}
+
+
+	// Return: (Guzzle) Response
+	// Args: (Guzzle) Response
+	private function validateResponse($response) {
+		if ($response->getStatusCode() === 200) {
+			return $response;
+		} else throw new Exception('HTTP Error: '.$response->getReasonPhrase());
 	}
 
 }
