@@ -4,6 +4,7 @@ class FirebaseClient {
 
 	# Properties
 	private $http;
+	private $timeout;
 	private $token;
 	private $host;
 
@@ -100,6 +101,13 @@ class FirebaseClient {
 	public function setHost($host) {
 		$host .= (substr($host,-1) === '/') ? '' : '/';
 		$this->host = $host;
+	}
+
+
+	// Return: void
+	// Args: (string) $timeout
+	public function setTimeout($timeout) {
+		if (is_numeric($timeout)) $this->timeout = $timeout;
 	}
 
 
