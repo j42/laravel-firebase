@@ -52,13 +52,14 @@ class FirebaseClient {
 
 		// Process URL/Path
 		$url = (strpos($args[0], 'https://') < 0) ? $this->absolutePath($args[0]) : $args[0];
+		var_dump($url); die();
 
 		if (count($args) < 3 && $func !== 'get') {
 			// Write Data
 			return $this->write($url, $args[1], $requestType);
 		} else {
 			// Read Data
-			return $this->get($url);
+			return $this->getJson($url);
 		}
 
 	}
@@ -66,7 +67,7 @@ class FirebaseClient {
 
 	// Return: (Guzzle) Firebase Response
 	// Args: (string) $path
-	public function get($path) {
+	public function getJson($path) {
 
 		// Process Request
 		$request  = $this->http->createRequest('GET', $path);
