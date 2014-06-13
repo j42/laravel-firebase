@@ -33,7 +33,7 @@ class LaravelFirebaseServiceProvider extends ServiceProvider {
 		$config = Config::get('database.connections.firebase');
 
 		// Bind `firebase` to IoC
-		App::singleton('firebase', function($app) {
+		App::singleton('firebase', function($app) use ($config) {
 			return new FirebaseClient($config);
 		});
 	}
