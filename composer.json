@@ -1,19 +1,22 @@
 {
     "name": "j42/laravel-firebase",
-    "description": "",
+    "description": "A Firebase port for Laravel (4.2+)",
     "authors": [
         {
-            "name": "",
-            "email": ""
+            "name": "Julian Aceves",
+            "email": "j@j42.me",
+            "homepage": "https://j42.me"
         }
     ],
     "require": {
         "php": ">=5.4.0",
-        "illuminate/support": "4.2.*"
+        "illuminate/support": "4.2.*",
+        "guzzlehttp/guzzle": "~4.0",
+        "firebase/php-jwt": "dev-master"
     },
     "autoload": {
         "classmap": [
-            "src/migrations"
+            "src/j42"
         ],
         "psr-0": {
             "J42\\LaravelFirebase\\": "src/"
