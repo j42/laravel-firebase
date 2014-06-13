@@ -18,7 +18,7 @@
         "php": ">=5.4.0",
         "illuminate/support": "4.2.*",
         "guzzlehttp/guzzle": "~4.0",
-        "firebase/php-jwt": "dev-master"
+        "firebase/php-jwt": "@dev"
     },
     "autoload": {
         "classmap": [
@@ -28,5 +28,5 @@
             "J42\\LaravelFirebase\\": "src/"
         }
     },
-    "minimum-stability": "dev"
+    "minimum-stability": "stable"
 }
