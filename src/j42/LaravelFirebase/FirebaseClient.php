@@ -16,8 +16,8 @@ class FirebaseClient {
 	public function __construct(Array $config) {
 
 		// Valid host?
-		if (empty($config['host'])) throw new UnexpectedValueException('Please enter a valid Firebase host URL.');
-		if (strpos($config['host'], 'http://') > -1) throw new UnexpectedValueException('Please use HTTPS for all Firebase URLs.');
+		if (empty($config['host'])) throw new \UnexpectedValueException('Please enter a valid Firebase host URL.');
+		if (strpos($config['host'], 'http://') > -1) throw new \UnexpectedValueException('Please use HTTPS for all Firebase URLs.');
 
 		// Set Host URI
 		$this->setHost($config['host']);
@@ -39,8 +39,8 @@ class FirebaseClient {
 	public function __call($func, $args) {
 
 		// Errors
-		if (!in_array($func, $this->passthrough)) throw new UnexpectedValueException('Unexpected method called');
-		if (count($args) < 1) throw new UnexpectedValueException('Not enough arguments');
+		if (!in_array($func, $this->passthrough)) throw new \UnexpectedValueException('Unexpected method called');
+		if (count($args) < 1) throw new \UnexpectedValueException('Not enough arguments');
 
 		// Write Methods
 		switch ($func) {
@@ -83,7 +83,7 @@ class FirebaseClient {
 
 		// Sanity Checks
 		$json = json_encode($data);
-		if ($json === 'null') throw new UnexpectedValueException('HTTP Error: Invalid request (invalid JSON)');
+		if ($json === 'null') throw new \UnexpectedValueException('HTTP Error: Invalid request (invalid JSON)');
 
 		// Process Request
 		$request  = $this->http->createRequest($method, $path, ['json' => $json]);
@@ -131,7 +131,7 @@ class FirebaseClient {
 			// Token is a string secret
 			$this->secret = $token;
 		} else {
-			throw new UnexpectedValueException('Token was not a valid configuration array (secret, options[, data]) or string');
+			throw new \UnexpectedValueException('Token was not a valid configuration array (secret, options[, data]) or string');
 		}
 	}
 
@@ -151,7 +151,7 @@ class FirebaseClient {
 	private function validateResponse($response) {
 		if ($response->getStatusCode() === 200) {
 			return $response;
-		} else throw new Exception('HTTP Error: '.$response->getReasonPhrase());
+		} else throw new \Exception('HTTP Error: '.$response->getReasonPhrase());
 	}
 
 }

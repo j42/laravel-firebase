@@ -91,7 +91,7 @@ class FirebaseToken {
             static::INVALID_OPTION		=> 'The Token Configuration Service encountered an invalid option in the configuration'
 		];
 
-		throw new UnexpectedValueException($messages[$n] ?: 'Unknown Error: '.$n);
+		throw new \UnexpectedValueException($messages[$n] ?: 'Unknown Error: '.$n);
 	}
 
 }
