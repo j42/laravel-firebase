@@ -16,8 +16,7 @@ class LaravelFirebaseServiceProvider extends ServiceProvider {
 	 *
 	 * @return void
 	 */
-	public function boot()
-	{
+	public function boot() {
 		$this->package('j42/laravel-firebase', 'firebase');
 	}
 
