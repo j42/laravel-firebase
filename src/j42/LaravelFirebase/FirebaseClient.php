@@ -1,5 +1,7 @@
 <?php namespace J42\LaravelFirebase;
 
+use \Illuminate\Database\Eloquent\Collection;
+
 class FirebaseClient {
 
 	# Properties
@@ -53,12 +55,12 @@ class FirebaseClient {
 		// Process URL/Path
 		$url = (strpos($args[0], 'https://') === false) ? $this->absolutePath($args[0]) : $args[0];
 
-		if (count($args) < 3 && $func !== 'get') {
+		if ($func !== 'get') {
 			// Write Data
 			return $this->write($url, $args[1], $requestType);
 		} else {
 			// Read Data
-			return $this->getJson($url);
+			return $this->getJson($url, (isset($args[1]) ? $args[1] : false));
 		}
 
 	}
@@ -66,14 +68,31 @@ class FirebaseClient {
 
 	// Return: (Guzzle) Firebase Response
 	// Args: (string) $path
-	public function getJson($path) {
+	public function getJson($path, $eloquentCollection = false) {
 
 		// Process Request
 		$request  = $this->http->createRequest('GET', $path);
 		$response = $this->http->send($request);
+		$response = $this->validateResponse($response)->json();
 
 		// Is Response Valid?
-		return $this->validateResponse($response)->getBody();
+		return ($eloquentCollection) ? $this->makeCollection($response, $eloquentCollection) : $response;
+	}
+
+
+	// Return: (Illuminate\Database\Eloquent\Collection) Eloquent Collection
+	// Args: (Array) $response, (string) $eloquentModel
+	public function makeCollection(Array $response, $eloquentModel) {
+		// Sanity Check
+		if (!class_exists($eloquentModel)) return Collection::make($response);
+		// Get IDs
+		$ids = [];
+		foreach ($response as $id => $object) {
+			$ids[] = $id;
+			$ids[] = $object['_id'];
+		}
+		// Return Collection
+		return call_user_func_array($eloquentModel.'::whereIn', ['_id', $ids]);
 	}
 
 
@@ -92,7 +111,7 @@ class FirebaseClient {
 		$response = $this->http->send($request);
 
 		// Is Response Valid?
-		return $this->validateResponse($response)->getBody();
+		return $this->validateResponse($response)->json();
 	}
 
 
