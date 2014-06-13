@@ -8,6 +8,12 @@
             "homepage": "https://j42.me"
         }
     ],
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/firebase/php-jwt"
+        }
+    ],
     "require": {
         "php": ">=5.4.0",
         "illuminate/support": "4.2.*",
@@ -22,5 +28,5 @@
             "J42\\LaravelFirebase\\": "src/"
         }
     },
-    "minimum-stability": "stable"
+    "minimum-stability": "dev"
 }
