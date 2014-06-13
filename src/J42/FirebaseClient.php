@@ -33,7 +33,7 @@ class FirebaseClient {
 	}
 
 
-	// Return: (Array) Firebase Response
+	// Return: (json) Firebase Response
 	// Args: (string) $path, (mixed) $data
 	public function __call($func, $args) {
 
@@ -54,10 +54,10 @@ class FirebaseClient {
 
 		if (count($args) < 3 && $func !== 'get') {
 			// Write Data
-			$this->write($url, $args[1], $requestType);
+			return $this->write($url, $args[1], $requestType);
 		} else {
 			// Read Data
-			$this->get($url);
+			return $this->get($url);
 		}
 
 	}
@@ -66,9 +66,11 @@ class FirebaseClient {
 	// Return: (Guzzle) Firebase Response
 	// Args: (string) $path
 	public function get($path) {
+
 		// Process Request
 		$request  = $this->http->createRequest('GET', $path);
 		$response = $this->http->send($request);
+
 		// Is Response Valid?
 		return $this->validateResponse($response)->getBody();
 	}
@@ -77,14 +79,17 @@ class FirebaseClient {
 	// Return: (Guzzle) Firebase Response
 	// Args: (string) $path, (Array) $data, (string) $method
 	public function write($path, Array $data, $method = 'PUT') {
+
 		// Sanity Checks
 		$json = json_encode($data);
 		if ($json === 'null') throw new UnexpectedValueException('HTTP Error: Invalid request (invalid JSON)');
+
 		// Process Request
 		$request  = $this->http->createRequest($method, $path, ['json' => $json]);
 		$request->setHeader('Content-Type', 'application/json');
 		$request->setHeader('Content-Length', strlen($json));
 		$response = $this->http->send($request);
+
 		// Is Response Valid?
 		return $this->validateResponse($response)->getBody();
 	}
@@ -107,7 +112,7 @@ class FirebaseClient {
 			// Generate Firebase JSON Web Token
 			$FirebaseToken 	= new FirebaseToken($token['secret']);
 			$FirebaseData	= $token['data'] ?: [];
-			$LocalData		= [
+			$LocalData	    = [
 				'user'	=> App::environment()
 			];
 
@@ -129,7 +134,6 @@ class FirebaseClient {
 		$url  = $this->host;
 		$path = ltrim($path, '/');
 		$auth = (!empty($this->token)) ? '?'.http_build_query(['auth' => $this->token]) : '';
-
 		return $url.$path.'.json'.$auth;
 	}
 
