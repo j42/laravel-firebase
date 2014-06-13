@@ -1,6 +1,8 @@
 <?php namespace J42\LaravelFirebase;
 
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Config;
 
 class LaravelFirebaseServiceProvider extends ServiceProvider {
 
