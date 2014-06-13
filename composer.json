@@ -1,0 +1,23 @@
+{
+    "name": "j42/laravel-firebase",
+    "description": "",
+    "authors": [
+        {
+            "name": "",
+            "email": ""
+        }
+    ],
+    "require": {
+        "php": ">=5.4.0",
+        "illuminate/support": "4.2.*"
+    },
+    "autoload": {
+        "classmap": [
+            "src/migrations"
+        ],
+        "psr-0": {
+            "J42\\LaravelFirebase\\": "src/"
+        }
+    },
+    "minimum-stability": "stable"
+}
