@@ -27,6 +27,5 @@
         "psr-0": {
             "J42\\LaravelFirebase\\": "src/"
         }
-    },
-    "minimum-stability": "stable"
+    }
 }
