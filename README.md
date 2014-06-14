@@ -59,4 +59,13 @@ Firebase::get('/my/path');
 
 // Returns: (\Illuminate\Database\Eloquent\Collection) Eloquent collection of Eloquent models
 Firebase::get('/my/path', 'ValidEloquentModelClass');
+
+// Returns: (Array) Firebase response
+Firebase::set('/my/path', $data);
+
+// Returns: (Array) Firebase response
+Firebase::push('/my/path', $data);
+
+// Returns: (Array) Firebase response
+Firebase::delete('/my/path');
 ```
