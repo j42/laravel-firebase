@@ -89,7 +89,8 @@ class FirebaseClient {
 		$ids = [];
 		foreach ($response as $id => $object) {
 			$ids[] = $id;
-			$ids[] = $object['_id'];
+			if (isset($object['_id'])) $ids[] = $object['_id'];
+			if (isset($object['id'])) $ids[] = $object['id'];
 		}
 		// Return Collection
 		return call_user_func_array($eloquentModel.'::whereIn', ['_id', $ids]);
