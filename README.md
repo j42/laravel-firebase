@@ -66,6 +66,31 @@ The **LaravelFirebase** service is loaded into the IoC container as a singleton,
 
 
 
+###Model Syncing
+
+By default this package will keep your Eloquent models in sync with Firebase.  That means that whenever `eloquent.saved: *` is fired, the model will be pushed to Firebase.  
+
+This package will automatically look for 'id', '_id', and '$id' variables on the model so that Firebase paths are normalized like so:
+
+```php
+
+// Eloquent model: User
+// Firebase location: /users/{user::id}
+
+$User = new User(['name' => 'Julian']);
+
+$User->save();	// Pushed to firebase
+
+$Copy = Firebase::get('/users/'.$User->id, 'User'); 	// === copy of $User
+$Copy = Firebase::get($User);							// === copy of $User
+
+```
+
+**To disable this, please add `'sync' => false` to your database.connections.firebase configuration array.**
+
+This works with any package that overwrites the default Eloquent model SO LONG AS it is configured to fire the appropriate `saved` and `updated` events.  At the moment it is tested with the base `Illuminate...Model` as well as the [Jenssegers MongoDB Eloquent Model](https://github.com/jenssegers/laravel-mongodb)
+
+
 ##Getting Started
 
 Making simple get requests:
@@ -105,23 +130,3 @@ $token = $FirebaseTokenGenerator->create($data, $options);
 
 $Firebase->setToken($token);
 ```
-
-#####Hook Into Eloquent
-
-By default this package will keep your Eloquent models in sync with Firebase.  That means that whenever `eloquent.saved: *` is fired, the model will be pushed to Firebase.  This package will automatically look for 'id', '_id', and '$id' variables on the model so that Firebase paths are normalized like so:
-
-```php
-
-// Eloquent model: User
-// Firebase location: /users/{user::id}
-
-$User = new User(['name' => 'Julian']);
-
-$User->save();	// Pushed to firebase
-
-$Copy = Firebase::get('/users/'.$User->id, 'User'); 	// === copy of $User
-$Copy = Firebase::get($User);							// === copy of $User
-
-```
-
-**This works with any package that overwrites the default Eloquent model SO LONG AS it is configured to fire the appropriate `saved` and `updated` events.**
