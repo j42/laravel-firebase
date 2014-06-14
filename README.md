@@ -25,12 +25,12 @@ Then add the service providers and facades to `config/app.php`
 	'Firebase'		  => 'J42\LaravelFirebase\LaravelFirebaseFacade'
 
 
-###Access Tokens
+Access Tokens
 ==
 
 Finally, you should configure your firebase connection in the `config/database.php` array.  There are two ways you can define this:
 
-####Simple Access Token**
+####Simple Access Token
 
 ```php
 'firebase' => array(
@@ -41,7 +41,7 @@ Finally, you should configure your firebase connection in the `config/database.p
 )
 ```
 
-####Advanced: Request a JWT**
+####Advanced: Request a JWT
 
 This accepts any of the standard options allowed by the firebase [security rules](https://www.firebase.com/docs/security/security-rules.html) and will generate a JSON Web Token for more granular authentication (subject to auth security rules and expirations).
 
@@ -63,11 +63,11 @@ This accepts any of the standard options allowed by the firebase [security rules
 ```
 
 
-The **LaravelFirebase** service is loaded into the IoC container as a singleton, containing a Guzzle instance used to interact with Firebase.
+The **FirebaseClient** instance is loaded into the IoC container as a singleton, containing a Guzzle instance used to interact with Firebase.
 
 
 
-###Model Syncing
+Model Syncing
 ==
 
 By default this package will keep your Eloquent models in sync with Firebase.  That means that whenever `eloquent.saved: *` is fired, the model will be pushed to Firebase.  
