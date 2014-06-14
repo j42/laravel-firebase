@@ -26,6 +26,7 @@ Then add the service providers and facades to `config/app.php`
 
 
 ###Access Tokens
+==
 
 Finally, you should configure your firebase connection in the `config/database.php` array.  There are two ways you can define this:
 
@@ -67,6 +68,7 @@ The **LaravelFirebase** service is loaded into the IoC container as a singleton,
 
 
 ###Model Syncing
+==
 
 By default this package will keep your Eloquent models in sync with Firebase.  That means that whenever `eloquent.saved: *` is fired, the model will be pushed to Firebase.  
 
