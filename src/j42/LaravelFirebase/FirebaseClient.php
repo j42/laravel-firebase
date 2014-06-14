@@ -85,7 +85,7 @@ class FirebaseClient {
 	}
 
 
-	// Return: (Guzzle) Firebase Response
+	// Return: (Array) Firebase Response || (Illuminate\Database\Eloquent\Collection) Eloquent Collection
 	// Args: (string) $path
 	public function read($path, $eloquentCollection = false) {
 
