@@ -25,34 +25,6 @@ Then add the service providers and facades to `config/app.php`
 	'Firebase'		  => 'J42\LaravelFirebase\LaravelFirebaseFacade'
 
 
-Getting Started
-----
-
-Making simple get requests:
-
-```php
-// Returns: (Array) of data items
-Firebase::get('/my/path');
-
-// Returns: (\Illuminate\Database\Eloquent\Collection) Eloquent collection of Eloquent models
-Firebase::get('/my/path', 'ValidEloquentModelClass');
-
-// Returns: (\Illuminate\Database\Eloquent\Model) Single Eloquent model
-// Conditions: $SomeModelInstance must inherit from Eloquent at some point, and have a (id, _id, or $id) property
-Firebase::get($SomeModelInstance);
-
-
-// Returns: (Array) Firebase response
-Firebase::set('/my/path', $data);
-
-// Returns: (Array) Firebase response
-Firebase::push('/my/path', $data);
-
-// Returns: (Array) Firebase response
-Firebase::delete('/my/path');
-```
-
-
 Access Tokens
 ----
 
@@ -93,6 +65,33 @@ This accepts any of the standard options allowed by the firebase [security rules
 
 The **FirebaseClient** instance is loaded into the IoC container as a singleton, containing a Guzzle instance used to interact with Firebase.
 
+
+Getting Started
+----
+
+Making simple get requests:
+
+```php
+// Returns: (Array) of data items
+Firebase::get('/my/path');
+
+// Returns: (\Illuminate\Database\Eloquent\Collection) Eloquent collection of Eloquent models
+Firebase::get('/my/path', 'ValidEloquentModelClass');
+
+// Returns: (\Illuminate\Database\Eloquent\Model) Single Eloquent model
+// Conditions: $SomeModelInstance must inherit from Eloquent at some point, and have a (id, _id, or $id) property
+Firebase::get($SomeModelInstance);
+
+
+// Returns: (Array) Firebase response
+Firebase::set('/my/path', $data);
+
+// Returns: (Array) Firebase response
+Firebase::push('/my/path', $data);
+
+// Returns: (Array) Firebase response
+Firebase::delete('/my/path');
+```
 
 
 Model Syncing
