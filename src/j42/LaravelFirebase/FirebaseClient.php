@@ -57,12 +57,6 @@ class FirebaseClient {
 				return $this->read($url, (isset($args[1]) ? $args[1] : false));
 			break;
 
-			case 'delete':
-				// Delete Data
-				$requestType = 'DELETE';
-				return $this->delete($url);
-			break;
-
 			case 'set': $requestType = 'PUT'; break;
 			case 'push': $requestType = 'POST'; break;
 			case 'update': $requestType = 'PATCH'; break;
@@ -77,7 +71,6 @@ class FirebaseClient {
 	// Return: (Guzzle) Firebase Response
 	// Args: (string) $path
 	public function delete($path) {
-
 		// Process Request
 		$request  = $this->http->createRequest('DELETE', $path);
 		$response = $this->http->send($request);
