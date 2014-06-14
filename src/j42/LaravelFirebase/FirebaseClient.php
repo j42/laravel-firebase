@@ -127,7 +127,7 @@ class FirebaseClient {
 		if ($json === 'null') throw new \UnexpectedValueException('HTTP Error: Invalid request (invalid JSON)');
 
 		// Process Request
-		$request  = $this->http->createRequest($method, $path, ['json' => $json]);
+		$request  = $this->http->createRequest($method, $path, ['body' => $json]);
 		$request->setHeader('Content-Type', 'application/json');
 		$request->setHeader('Content-Length', strlen($json));
 		$response = $this->http->send($request);
