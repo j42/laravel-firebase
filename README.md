@@ -32,17 +32,17 @@ Finally, you should configure your firebase connection in the `config/database.p
 
 **Request a JWT**
 
-	```php
-	'firebase' => array(
-		'host'		=> 'https://servicerunner.firebaseio.com/',
-		'token'		=> [
-			'secret'	=> '<yoursecret>',
-			'options'	=> null,
-			'data'		=> []
-		],
-		'timeout'	=> 10
-	)
-	```
+```php
+'firebase' => array(
+	'host'		=> 'https://servicerunner.firebaseio.com/',
+	'token'		=> [
+		'secret'	=> '<yoursecret>',
+		'options'	=> null,
+		'data'		=> []
+	],
+	'timeout'	=> 10
+)
+```
 
 
 The **LaravelFirebase** service is loaded into the IoC container as a singleton, containing a Guzzle instance used to interact with Firebase.
@@ -53,10 +53,10 @@ The **LaravelFirebase** service is loaded into the IoC container as a singleton,
 
 Making simple get requests:
 
-	```php
-	// Returns: (Array) of data items
-	Firebase::get('/my/path');
+```php
+// Returns: (Array) of data items
+Firebase::get('/my/path');
 
-	// Returns: (\Illuminate\Database\Eloquent\Collection) Eloquent collection of Eloquent models
-	Firebase::get('/my/path', 'ValidEloquentModelClass');
-	```
+// Returns: (\Illuminate\Database\Eloquent\Collection) Eloquent collection of Eloquent models
+Firebase::get('/my/path', 'ValidEloquentModelClass');
+```
