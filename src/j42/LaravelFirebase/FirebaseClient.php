@@ -122,8 +122,8 @@ class FirebaseClient {
 	// Args: (string) $path, (Array || Object) $data, (string) $method
 	public function write($path, $data, $method = 'PUT') {
 
-		// Typecase Data to JSON
-		$json = json_encode((array) $data);
+		// JSON.stringify $data
+		$json = json_encode($data);
 
 		// Sanity Checks
 		if (!is_array($data) && !is_object($data)) throw new \UnexpectedValueException('Invalid input type received');
