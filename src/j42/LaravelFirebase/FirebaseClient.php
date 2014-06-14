@@ -44,31 +44,49 @@ class FirebaseClient {
 		if (!in_array($func, $this->passthrough)) throw new \UnexpectedValueException('Unexpected method called');
 		if (count($args) < 1) throw new \UnexpectedValueException('Not enough arguments');
 
-		// Write Methods
-		switch ($func) {
-			case 'set': $requestType = 'PUT'; break;
-			case 'push': $requestType = 'POST'; break;
-			case 'update': $requestType = 'PATCH'; break;
-			case 'get': $requestType = 'GET'; break;
-		}
-
 		// Process URL/Path
 		$url = (strpos($args[0], 'https://') === false) ? $this->absolutePath($args[0]) : $args[0];
 
-		if ($func !== 'get') {
-			// Write Data
-			return $this->write($url, $args[1], $requestType);
-		} else {
-			// Read Data
-			return $this->getJson($url, (isset($args[1]) ? $args[1] : false));
+		// Write Methods
+		switch ($func) {
+
+			case 'get':
+				// Read Data 
+				$requestType = 'GET'; 
+				return $this->read($url, (isset($args[1]) ? $args[1] : false));
+			break;
+
+			case 'delete':
+				// Delete Data
+				$requestType = 'DELETE';
+				return $this->delete($url);
+			break;
+
+			case 'set': $requestType = 'PUT'; break;
+			case 'push': $requestType = 'POST'; break;
+			case 'update': $requestType = 'PATCH'; break;
 		}
+
+		// Else Write Data
+		return ($requestType) ? $this->write($url, $args[1], $requestType) : null;
 
 	}
 
 
 	// Return: (Guzzle) Firebase Response
 	// Args: (string) $path
-	public function getJson($path, $eloquentCollection = false) {
+	public function delete($path) {
+
+		// Process Request
+		$request  = $this->http->createRequest('DELETE', $path);
+		$response = $this->http->send($request);
+		return $this->validateResponse($response)->json();
+	}
+
+
+	// Return: (Guzzle) Firebase Response
+	// Args: (string) $path
+	public function read($path, $eloquentCollection = false) {
 
 		// Process Request
 		$request  = $this->http->createRequest('GET', $path);
@@ -83,8 +101,10 @@ class FirebaseClient {
 	// Return: (Illuminate\Database\Eloquent\Collection) Eloquent Collection
 	// Args: (Array) $response, (string) $eloquentModel
 	public function makeCollection(Array $response, $eloquentModel) {
+
 		// Sanity Check
 		if (!class_exists($eloquentModel)) return Collection::make($response);
+
 		// Get IDs
 		$ids = [];
 		foreach ($response as $id => $object) {
@@ -92,6 +112,7 @@ class FirebaseClient {
 			if (isset($object['_id'])) $ids[] = $object['_id'];
 			if (isset($object['id'])) $ids[] = $object['id'];
 		}
+
 		// Return Collection
 		return call_user_func_array($eloquentModel.'::whereIn', ['_id', $ids]);
 	}
