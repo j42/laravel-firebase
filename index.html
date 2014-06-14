@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset='utf-8' />
+    <meta http-equiv="X-UA-Compatible" content="chrome=1" />
+    <meta name="description" content="Laravel-firebase : A Firebase port for Laravel (4.2+)" />
+
+    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
+
+    <title>Laravel-firebase</title>
+  </head>
+
+  <body>
+
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/j42/laravel-firebase">View on GitHub</a>
+
+          <h1 id="project_title">Laravel-firebase</h1>
+          <h2 id="project_tagline">A Firebase port for Laravel (4.2+)</h2>
+
+            <section id="downloads">
+              <a class="zip_download_link" href="https://github.com/j42/laravel-firebase/zipball/master">Download this project as a .zip file</a>
+              <a class="tar_download_link" href="https://github.com/j42/laravel-firebase/tarball/master">Download this project as a tar.gz file</a>
+            </section>
+        </header>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
+        <h1>
+<a name="laravel-firebase" class="anchor" href="#laravel-firebase"><span class="octicon octicon-link"></span></a>laravel-firebase</h1>
+
+<p>A Firebase port for Laravel (4.2+)</p>
+
+<h2>
+<a name="configuration" class="anchor" href="#configuration"><span class="octicon octicon-link"></span></a>Configuration</h2>
+
+<p>Install via composer.  If you have <code>minimum-stability</code> set to <code>stable</code>, you should add a <code>@beta</code> or <code>@dev</code> in order to use the <code>php-jwt</code> library (a dependency managed by firebase for generating JSON web token).</p>
+
+<p>Add the following line to your <code>composer.json</code> and run composer update:</p>
+
+<pre><code>{
+  "require": {
+    "j42/laravel-firebase": "dev-master"
+  }
+}
+</code></pre>
+
+<p>Then add the service providers and facades to <code>config/app.php</code></p>
+
+<pre><code>'J42\LaravelFirebase\LaravelFirebaseServiceProvider',
+</code></pre>
+
+<p>...</p>
+
+<pre><code>'Firebase'        =&gt; 'J42\LaravelFirebase\LaravelFirebaseFacade'
+</code></pre>
+
+<h3>
+<a name="access-tokens" class="anchor" href="#access-tokens"><span class="octicon octicon-link"></span></a>Access Tokens</h3>
+
+<p>Finally, you should configure your firebase connection in the <code>config/database.php</code> array.  There are two ways you can define this:</p>
+
+<h4>
+<a name="simple-access-token" class="anchor" href="#simple-access-token"><span class="octicon octicon-link"></span></a>Simple Access Token**</h4>
+
+<div class="highlight highlight-php"><pre><span class="s1">'firebase'</span> <span class="o">=&gt;</span> <span class="k">array</span><span class="p">(</span>
+    <span class="s1">'host'</span>      <span class="o">=&gt;</span> <span class="s1">'https://&lt;you&gt;.firebaseio.com/'</span><span class="p">,</span>
+    <span class="s1">'token'</span>     <span class="o">=&gt;</span> <span class="s1">'&lt;yoursecret&gt;'</span><span class="p">,</span>
+    <span class="s1">'timeout'</span>   <span class="o">=&gt;</span> <span class="mi">10</span><span class="p">,</span>
+    <span class="s1">'sync'</span>      <span class="o">=&gt;</span> <span class="k">true</span><span class="p">,</span>            <span class="c1">// OPTIONAL: auto-sync all Eloquent models with Firebase?</span>
+<span class="p">)</span>
+</pre></div>
+
+<h4>
+<a name="advanced-request-a-jwt" class="anchor" href="#advanced-request-a-jwt"><span class="octicon octicon-link"></span></a>Advanced: Request a JWT**</h4>
+
+<p>This accepts any of the standard options allowed by the firebase <a href="https://www.firebase.com/docs/security/security-rules.html">security rules</a> and will generate a JSON Web Token for more granular authentication (subject to auth security rules and expirations).</p>
+
+<div class="highlight highlight-php"><pre><span class="s1">'firebase'</span> <span class="o">=&gt;</span> <span class="k">array</span><span class="p">(</span>
+    <span class="s1">'host'</span>      <span class="o">=&gt;</span> <span class="s1">'https://servicerunner.firebaseio.com/'</span><span class="p">,</span>
+    <span class="s1">'token'</span>     <span class="o">=&gt;</span> <span class="p">[</span>
+        <span class="s1">'secret'</span>    <span class="o">=&gt;</span> <span class="s1">'&lt;yoursecret&gt;'</span><span class="p">,</span>
+        <span class="s1">'options'</span>   <span class="o">=&gt;</span> <span class="p">[</span>
+            <span class="s1">'auth'</span>  <span class="o">=&gt;</span> <span class="p">[</span>
+                <span class="s1">'email'</span> <span class="o">=&gt;</span> <span class="s1">'example@yoursite.com'</span>
+            <span class="p">]</span>
+        <span class="p">],</span>
+        <span class="s1">'data'</span>      <span class="o">=&gt;</span> <span class="p">[]</span>
+    <span class="p">],</span>
+    <span class="s1">'timeout'</span>   <span class="o">=&gt;</span> <span class="mi">10</span><span class="p">,</span>
+    <span class="s1">'sync'</span>      <span class="o">=&gt;</span> <span class="k">true</span><span class="p">,</span>            <span class="c1">// OPTIONAL: auto-sync all Eloquent models with Firebase?</span>
+<span class="p">)</span>
+</pre></div>
+
+<p>The <strong>LaravelFirebase</strong> service is loaded into the IoC container as a singleton, containing a Guzzle instance used to interact with Firebase.</p>
+
+<h3>
+<a name="model-syncing" class="anchor" href="#model-syncing"><span class="octicon octicon-link"></span></a>Model Syncing</h3>
+
+<p>By default this package will keep your Eloquent models in sync with Firebase.  That means that whenever <code>eloquent.saved: *</code> is fired, the model will be pushed to Firebase.  </p>
+
+<p>This package will automatically look for 'id', '_id', and '$id' variables on the model so that Firebase paths are normalized like so:</p>
+
+<div class="highlight highlight-php"><pre>
+<span class="c1">// Eloquent model: User</span>
+<span class="c1">// Firebase location: /users/{user::id}</span>
+
+<span class="nv">$User</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">User</span><span class="p">([</span><span class="s1">'name'</span> <span class="o">=&gt;</span> <span class="s1">'Julian'</span><span class="p">]);</span>
+
+<span class="nv">$User</span><span class="o">-&gt;</span><span class="na">save</span><span class="p">();</span>  <span class="c1">// Pushed to firebase</span>
+
+<span class="nv">$Copy</span> <span class="o">=</span> <span class="nx">Firebase</span><span class="o">::</span><span class="na">get</span><span class="p">(</span><span class="s1">'/users/'</span><span class="o">.</span><span class="nv">$User</span><span class="o">-&gt;</span><span class="na">id</span><span class="p">,</span> <span class="s1">'User'</span><span class="p">);</span>     <span class="c1">// === copy of $User</span>
+<span class="nv">$Copy</span> <span class="o">=</span> <span class="nx">Firebase</span><span class="o">::</span><span class="na">get</span><span class="p">(</span><span class="nv">$User</span><span class="p">);</span>                           <span class="c1">// === copy of $User</span>
+
+</pre></div>
+
+<p><strong>To disable this, please add <code>'sync' =&gt; false</code> to your database.connections.firebase configuration array.</strong></p>
+
+<p>This works with any package that overwrites the default Eloquent model SO LONG AS it is configured to fire the appropriate <code>saved</code> and <code>updated</code> events.  At the moment it is tested with the base <code>Illuminate...Model</code> as well as the <a href="https://github.com/jenssegers/laravel-mongodb">Jenssegers MongoDB Eloquent Model</a></p>
+
+<h2>
+<a name="getting-started" class="anchor" href="#getting-started"><span class="octicon octicon-link"></span></a>Getting Started</h2>
+
+<p>Making simple get requests:</p>
+
+<div class="highlight highlight-php"><pre><span class="c1">// Returns: (Array) of data items</span>
+<span class="nx">Firebase</span><span class="o">::</span><span class="na">get</span><span class="p">(</span><span class="s1">'/my/path'</span><span class="p">);</span>
+
+<span class="c1">// Returns: (\Illuminate\Database\Eloquent\Collection) Eloquent collection of Eloquent models</span>
+<span class="nx">Firebase</span><span class="o">::</span><span class="na">get</span><span class="p">(</span><span class="s1">'/my/path'</span><span class="p">,</span> <span class="s1">'ValidEloquentModelClass'</span><span class="p">);</span>
+
+<span class="c1">// Returns: (\Illuminate\Database\Eloquent\Model) Single Eloquent model</span>
+<span class="c1">// Conditions: $SomeModelInstance must inherit from Eloquent at some point, and have a (id, _id, or $id) property</span>
+<span class="nx">Firebase</span><span class="o">::</span><span class="na">get</span><span class="p">(</span><span class="nv">$SomeModelInstance</span><span class="p">);</span>
+
+
+<span class="c1">// Returns: (Array) Firebase response</span>
+<span class="nx">Firebase</span><span class="o">::</span><span class="na">set</span><span class="p">(</span><span class="s1">'/my/path'</span><span class="p">,</span> <span class="nv">$data</span><span class="p">);</span>
+
+<span class="c1">// Returns: (Array) Firebase response</span>
+<span class="nx">Firebase</span><span class="o">::</span><span class="na">push</span><span class="p">(</span><span class="s1">'/my/path'</span><span class="p">,</span> <span class="nv">$data</span><span class="p">);</span>
+
+<span class="c1">// Returns: (Array) Firebase response</span>
+<span class="nx">Firebase</span><span class="o">::</span><span class="na">delete</span><span class="p">(</span><span class="s1">'/my/path'</span><span class="p">);</span>
+</pre></div>
+
+<h2>
+<a name="advanced-use" class="anchor" href="#advanced-use"><span class="octicon octicon-link"></span></a>Advanced Use</h2>
+
+<h5>
+<a name="create-a-token-manually" class="anchor" href="#create-a-token-manually"><span class="octicon octicon-link"></span></a>Create a token manually</h5>
+
+<div class="highlight highlight-php"><pre><span class="nv">$FirebaseTokenGenerator</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">J42\LaravelFirebase\FirebaseToken</span><span class="p">(</span><span class="nx">FIREBASE_SECRET</span><span class="p">);</span>
+<span class="nv">$Firebase</span> <span class="o">=</span> <span class="nx">App</span><span class="o">::</span><span class="na">make</span><span class="p">(</span><span class="s1">'firebase'</span><span class="p">);</span>
+
+<span class="nv">$token</span> <span class="o">=</span> <span class="nv">$FirebaseTokenGenerator</span><span class="o">-&gt;</span><span class="na">create</span><span class="p">(</span><span class="nv">$data</span><span class="p">,</span> <span class="nv">$options</span><span class="p">);</span>
+
+<span class="nv">$Firebase</span><span class="o">-&gt;</span><span class="na">setToken</span><span class="p">(</span><span class="nv">$token</span><span class="p">);</span>
+</pre></div>
+      </section>
+    </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p class="copyright">Laravel-firebase maintained by <a href="https://github.com/j42">j42</a></p>
+        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
+      </footer>
+    </div>
+
+    
+
+  </body>
+</html>
