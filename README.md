@@ -76,7 +76,10 @@ Firebase::get('/my/path');
 
 // Returns: (\Illuminate\Database\Eloquent\Collection) Eloquent collection of Eloquent models
 Firebase::get('/my/path', 'ValidEloquentModelClass');
-Firebase::get($ValidEloquentModelInstance);				// Identical to the above syntax
+
+// Returns: (\Illuminate\Database\Eloquent\Model) Single Eloquent model
+// Conditions: $SomeModelInstance must inherit from Eloquent at some point, and have a (id, _id, or $id) property
+Firebase::get($SomeModelInstance);
 
 
 // Returns: (Array) Firebase response
