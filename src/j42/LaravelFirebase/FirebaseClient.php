@@ -119,12 +119,15 @@ class FirebaseClient {
 
 
 	// Return: (Guzzle) Firebase Response
-	// Args: (string) $path, (Array) $data, (string) $method
-	public function write($path, Array $data, $method = 'PUT') {
+	// Args: (string) $path, (Array || Object) $data, (string) $method
+	public function write($path, $data, $method = 'PUT') {
 
 		// Sanity Checks
-		$json = json_encode($data);
+		if (!is_array($data) && !is_object($data)) throw new \UnexpectedValueException('Invalid input type received');
 		if ($json === 'null') throw new \UnexpectedValueException('HTTP Error: Invalid request (invalid JSON)');
+
+		// Typecase Data to JSON
+		$json = json_encode((array) $data);
 
 		// Process Request
 		$request  = $this->http->createRequest($method, $path, ['body' => $json]);
