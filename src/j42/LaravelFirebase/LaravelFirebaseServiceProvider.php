@@ -3,6 +3,7 @@
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\Event;
 
 class LaravelFirebaseServiceProvider extends ServiceProvider {
 
@@ -19,7 +20,21 @@ class LaravelFirebaseServiceProvider extends ServiceProvider {
 	 * @return void
 	 */
 	public function boot() {
+
+		// Register Package
 		$this->package('j42/laravel-firebase', 'firebase');
+		
+		// Register Eloquent Hooks
+		$sync = Config::get('database.connections.firebase.sync');
+		if ($sync !== false) {
+			Event::listen('eloquent.saved: *', function($obj) {
+				$path = strtolower(get_class($obj)).'s';
+				\Firebase::getId($obj);
+				\Firebase::set('/'.$path.'/'.$id, $obj->toArray());
+				return true;
+			});
+		}
+
 	}
 
 	/**
@@ -36,6 +51,7 @@ class LaravelFirebaseServiceProvider extends ServiceProvider {
 		App::singleton('firebase', function($app) use ($config) {
 			return new FirebaseClient($config);
 		});
+
 	}
 
 	/**

@@ -35,7 +35,8 @@ Finally, you should configure your firebase connection in the `config/database.p
 'firebase' => array(
 	'host'		=> 'https://<you>.firebaseio.com/',
 	'token'		=> '<yoursecret>',
-	'timeout'	=> 10
+	'timeout'	=> 10,
+	'sync'		=> true,			// OPTIONAL: auto-sync all Eloquent models with Firebase?
 )
 ```
 
@@ -55,7 +56,8 @@ This accepts any of the standard options allowed by the firebase [security rules
 		],
 		'data'		=> []
 	],
-	'timeout'	=> 10
+	'timeout'	=> 10,
+	'sync'		=> true,			// OPTIONAL: auto-sync all Eloquent models with Firebase?
 )
 ```
 
@@ -74,6 +76,8 @@ Firebase::get('/my/path');
 
 // Returns: (\Illuminate\Database\Eloquent\Collection) Eloquent collection of Eloquent models
 Firebase::get('/my/path', 'ValidEloquentModelClass');
+Firebase::get($ValidEloquentModelInstance);				// Identical to the above syntax
+
 
 // Returns: (Array) Firebase response
 Firebase::set('/my/path', $data);
@@ -88,7 +92,7 @@ Firebase::delete('/my/path');
 
 ##Advanced Use
 
-Create a token manually:
+#####Create a token manually
 
 ```php
 $FirebaseTokenGenerator = new J42\LaravelFirebase\FirebaseToken(FIREBASE_SECRET);
@@ -98,3 +102,23 @@ $token = $FirebaseTokenGenerator->create($data, $options);
 
 $Firebase->setToken($token);
 ```
+
+#####Hook Into Eloquent
+
+By default this package will keep your Eloquent models in sync with Firebase.  That means that whenever `eloquent.saved: *` is fired, the model will be pushed to Firebase.  This package will automatically look for 'id', '_id', and '$id' variables on the model so that Firebase paths are normalized like so:
+
+```php
+
+// Eloquent model: User
+// Firebase location: /users/{user::id}
+
+$User = new User(['name' => 'Julian']);
+
+$User->save();	// Pushed to firebase
+
+$Copy = Firebase::get('/users/'.$User->id, 'User'); 	// === copy of $User
+$Copy = Firebase::get($User);							// === copy of $User
+
+```
+
+**This works with any package that overwrites the default Eloquent model SO LONG AS it is configured to fire the appropriate `saved` and `updated` events.**

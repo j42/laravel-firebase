@@ -1,6 +1,7 @@
 <?php namespace J42\LaravelFirebase;
 
 use \Illuminate\Database\Eloquent\Collection;
+use \Illuminate\Database\Eloquent\Model;
 
 class FirebaseClient {
 
@@ -45,7 +46,7 @@ class FirebaseClient {
 		if (count($args) < 1) throw new \UnexpectedValueException('Not enough arguments');
 
 		// Process URL/Path
-		$url = (strpos($args[0], 'https://') === false) ? $this->absolutePath($args[0]) : $args[0];
+		$url = $this->absolutePath($args[0]);
 
 		// Write Methods
 		switch ($func) {
@@ -109,8 +110,7 @@ class FirebaseClient {
 		$ids = [];
 		foreach ($response as $id => $object) {
 			$ids[] = $id;
-			if (isset($object['_id'])) $ids[] = $object['_id'];
-			if (isset($object['id'])) $ids[] = $object['id'];
+			$ids[] = self::getId($object);
 		}
 
 		// Return Collection
@@ -180,10 +180,23 @@ class FirebaseClient {
 
 
 	// Return: (string) Absolute URL Path
-	// Args: (string) $path
-	private function absolutePath($path) {
+	// Args: (mixed) $path
+	private function absolutePath($item) {
+
+		// Sanity Check
+		if (!is_string($item) && !$item instanceOf Model) throw new \UnexpectedValueException('Path should be a string or object.');
+
+		// Item is already a fully-qualified URL
+		if ((strpos($item, 'https://') !== false)) return $item;
+
+		// Else, build URL
 		$url  = $this->host;
-		$path = ltrim($path, '/');
+
+		// Path from Item
+		if (is_string($item)) $path = ltrim($item, '/');
+		if ($item instanceOf Model) $path = strtolower(get_class($item)).'s/'.self::getId($item);
+
+		// Return URL
 		$auth = (!empty($this->token)) ? '?'.http_build_query(['auth' => $this->token]) : '';
 		return $url.$path.'.json'.$auth;
 	}
@@ -215,5 +228,16 @@ class FirebaseClient {
 		}
 		return $out;
 	}
+
+
+	// [STA]
+	// Return: (string) Model ID
+	// Args: (Model) $obj
+	public static function getId($obj) {
+		if (isset($obj['id'])) return $obj['id'];
+		if (isset($obj['_id'])) return $obj['_id'];
+		if (isset($obj['$id'])) return $obj['$id'];
+		throw new \UnexpectedValueException('Invalid model object received: no primary ID (id, _id, $id)');
+ 	}
 
 }
