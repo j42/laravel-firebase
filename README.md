@@ -25,6 +25,34 @@ Then add the service providers and facades to `config/app.php`
 	'Firebase'		  => 'J42\LaravelFirebase\LaravelFirebaseFacade'
 
 
+Getting Started
+----
+
+Making simple get requests:
+
+```php
+// Returns: (Array) of data items
+Firebase::get('/my/path');
+
+// Returns: (\Illuminate\Database\Eloquent\Collection) Eloquent collection of Eloquent models
+Firebase::get('/my/path', 'ValidEloquentModelClass');
+
+// Returns: (\Illuminate\Database\Eloquent\Model) Single Eloquent model
+// Conditions: $SomeModelInstance must inherit from Eloquent at some point, and have a (id, _id, or $id) property
+Firebase::get($SomeModelInstance);
+
+
+// Returns: (Array) Firebase response
+Firebase::set('/my/path', $data);
+
+// Returns: (Array) Firebase response
+Firebase::push('/my/path', $data);
+
+// Returns: (Array) Firebase response
+Firebase::delete('/my/path');
+```
+
+
 Access Tokens
 ----
 
@@ -91,33 +119,6 @@ $Copy = Firebase::get($User);							// === copy of $User
 **To disable this, please add `'sync' => false` to your database.connections.firebase configuration array.**
 
 This works with any package that overwrites the default Eloquent model SO LONG AS it is configured to fire the appropriate `saved` and `updated` events.  At the moment it is tested with the base `Illuminate...Model` as well as the [Jenssegers MongoDB Eloquent Model](https://github.com/jenssegers/laravel-mongodb)
-
-
-##Getting Started
-
-Making simple get requests:
-
-```php
-// Returns: (Array) of data items
-Firebase::get('/my/path');
-
-// Returns: (\Illuminate\Database\Eloquent\Collection) Eloquent collection of Eloquent models
-Firebase::get('/my/path', 'ValidEloquentModelClass');
-
-// Returns: (\Illuminate\Database\Eloquent\Model) Single Eloquent model
-// Conditions: $SomeModelInstance must inherit from Eloquent at some point, and have a (id, _id, or $id) property
-Firebase::get($SomeModelInstance);
-
-
-// Returns: (Array) Firebase response
-Firebase::set('/my/path', $data);
-
-// Returns: (Array) Firebase response
-Firebase::push('/my/path', $data);
-
-// Returns: (Array) Firebase response
-Firebase::delete('/my/path');
-```
 
 
 ##Advanced Use
