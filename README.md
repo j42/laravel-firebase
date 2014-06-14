@@ -24,6 +24,9 @@ Then add the service providers and facades to `config/app.php`
 
 	'Firebase'		  => 'J42\LaravelFirebase\LaravelFirebaseFacade'
 
+
+###Access Tokens
+
 Finally, you should configure your firebase connection in the `config/database.php` array.  There are two ways you can define this:
 
 ####Simple Access Token**
