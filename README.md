@@ -22,13 +22,13 @@ Finally, you should configure your firebase connection in the `config/database.p
 
 **Simple Access Token**
 
-	```php
-	'firebase' => array(
-		'host'		=> 'https://<you>.firebaseio.com/',
-		'token'		=> '<yoursecret>',
-		'timeout'	=> 10
-	)
-	```
+```php
+'firebase' => array(
+	'host'		=> 'https://<you>.firebaseio.com/',
+	'token'		=> '<yoursecret>',
+	'timeout'	=> 10
+)
+```
 
 **Request a JWT**
 
