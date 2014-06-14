@@ -126,13 +126,12 @@ class FirebaseClient {
 		$json = json_encode($data);
 
 		// Sanity Checks
+		if (is_object($data)) $data = $data->toArray();
 		if (!is_array($data) && !is_object($data)) throw new \UnexpectedValueException('Invalid input type received');
 		if ($json === 'null') throw new \UnexpectedValueException('HTTP Error: Invalid request (invalid JSON)');
 
 		// Process Request
-		$request  = $this->http->createRequest($method, $path, ['body' => $json]);
-		$request->setHeader('Content-Type', 'application/json');
-		$request->setHeader('Content-Length', strlen($json));
+		$request  = $this->http->createRequest($method, $path, ['json' => self::clean($data)]);
 		$response = $this->http->send($request);
 
 		// Is Response Valid?
@@ -196,6 +195,25 @@ class FirebaseClient {
 		if ($response->getStatusCode() == 200) {
 			return $response;
 		} else throw new \Exception('HTTP Error: '.$response->getReasonPhrase());
+	}
+
+
+
+	// [STA]
+	// Return: (Array) $data
+	// Args: (Array) $data
+	public static function clean($data) {
+		$out = [];
+		// Begin recursive loop
+		foreach ($data as $key => $value) {
+			$key = preg_replace('/[\.\#\$\/\[\]]/i', '', $key);
+			if (is_array($value) || is_object($value)) {
+				$out[$key] = self::clean($value);
+			} else {
+				$out[$key] = $value;
+			}
+		}
+		return $out;
 	}
 
 }
