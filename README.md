@@ -8,7 +8,13 @@ A Firebase port for Laravel (4.2+)
 
 Install via composer.  If you have `minimum-stability` set to `stable`, you should add a `@beta` or `@dev` in order to use the `php-jwt` library (a dependency managed by firebase for generating JSON web token).
 
-	"j42/laravel-firebase": "dev-master"
+Add the following line to your `composer.json` and run composer update:
+
+	{
+	  "require": {
+	    "j42/laravel-firebase": "dev-master"
+	  }
+	}
 
 Then add the service providers and facades to `config/app.php`
 
@@ -20,7 +26,7 @@ Then add the service providers and facades to `config/app.php`
 
 Finally, you should configure your firebase connection in the `config/database.php` array.  There are two ways you can define this:
 
-**Simple Access Token**
+####Simple Access Token**
 
 ```php
 'firebase' => array(
@@ -30,14 +36,20 @@ Finally, you should configure your firebase connection in the `config/database.p
 )
 ```
 
-**Request a JWT**
+####Advanced: Request a JWT**
+
+This accepts any of the standard options allowed by the firebase [security rules](https://www.firebase.com/docs/security/security-rules.html) and will generate a JSON Web Token for more granular authentication (subject to auth security rules and expirations).
 
 ```php
 'firebase' => array(
 	'host'		=> 'https://servicerunner.firebaseio.com/',
 	'token'		=> [
 		'secret'	=> '<yoursecret>',
-		'options'	=> null,
+		'options'	=> [
+			'auth'	=> [
+				'email' => 'example@yoursite.com'
+			]
+		],
 		'data'		=> []
 	],
 	'timeout'	=> 10
@@ -68,4 +80,18 @@ Firebase::push('/my/path', $data);
 
 // Returns: (Array) Firebase response
 Firebase::delete('/my/path');
+```
+
+
+##Advanced Use
+
+Create a token manually:
+
+```php
+$FirebaseTokenGenerator = new J42\LaravelFirebase\FirebaseToken(FIREBASE_SECRET);
+$Firebase = App::make('firebase');
+
+$token = $FirebaseTokenGenerator->create($data, $options);
+
+$Firebase->setToken($token);
 ```
