@@ -29,7 +29,7 @@ class LaravelFirebaseServiceProvider extends ServiceProvider {
 		if ($sync !== false) {
 			Event::listen('eloquent.saved: *', function($obj) {
 				$path = strtolower(get_class($obj)).'s';
-				\Firebase::getId($obj);
+				$id = \Firebase::getId($obj);
 				\Firebase::set('/'.$path.'/'.$id, $obj->toArray());
 				return true;
 			});
