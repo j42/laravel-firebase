@@ -37,7 +37,7 @@ Finally, you should configure your firebase connection in the `config/database.p
 	'host'		=> 'https://<you>.firebaseio.com/',
 	'token'		=> '<yoursecret>',
 	'timeout'	=> 10,
-	'sync'		=> true,			// OPTIONAL: auto-sync all Eloquent models with Firebase?
+	'sync'		=> false,			// OPTIONAL: auto-sync all Eloquent models with Firebase?
 )
 ```
 
@@ -58,7 +58,7 @@ This accepts any of the standard options allowed by the firebase [security rules
 		'data'		=> []
 	],
 	'timeout'	=> 10,
-	'sync'		=> true,			// OPTIONAL: auto-sync all Eloquent models with Firebase?
+	'sync'		=> false,			// OPTIONAL: auto-sync all Eloquent models with Firebase?
 )
 ```
 
@@ -115,9 +115,24 @@ $Copy = Firebase::get($User);							// === copy of $User
 
 ```
 
-**To disable this, please add `'sync' => false` to your database.connections.firebase configuration array.**
+To disable this, please ensure `'sync' => false` in your database.connections.firebase configuration array.
 
 This works with any package that overwrites the default Eloquent model SO LONG AS it is configured to fire the appropriate `saved` and `updated` events.  At the moment it is tested with the base `Illuminate...Model` as well as the [Jenssegers MongoDB Eloquent Model](https://github.com/jenssegers/laravel-mongodb)
+
+####Syncing Models Individually
+
+If you want to add a whitelist of properties to push to firebase automatically whenever a model is **updated**, you can do so by adding a whitelist of properties to any supported model.
+
+This action happens regardless of the (automatic) `sync` property in your configuration array.  If the `$firebase` whitelist array is found, then the fields contained will be posted on every update event.
+
+```php
+
+class User extends Eloquent {
+	...
+	public $firebase = ['public_property','name','created'];	// These properties are pushed to firebase every time the model is updated
+}
+
+```
 
 
 ##Advanced Use
