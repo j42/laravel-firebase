@@ -24,10 +24,13 @@ class LaravelFirebaseServiceProvider extends ServiceProvider {
 		// Register Package
 		$this->package('j42/laravel-firebase', 'firebase');
 
+		// Reference
+		$self = $this;
+
 		// Register Eloquent Hooks
-		Event::listen('eloquent.created: *', function($obj) { return $this->sync($obj); }, 10);
-		Event::listen('eloquent.updated: *', function($obj) { return $this->sync($obj); }, 10);
-		Event::listen('eloquent.deleted: *', function($obj) { return $this->delete($obj); }, 10);
+		Event::listen('eloquent.created: *', function($obj) use ($self) { return $self->sync($obj); }, 10);
+		Event::listen('eloquent.updated: *', function($obj) use ($self) { return $self->sync($obj); }, 10);
+		Event::listen('eloquent.deleted: *', function($obj) use ($self) { return $self->delete($obj); }, 10);
 	}
 
 	/**
