@@ -97,7 +97,7 @@ Firebase::delete('/my/path');
 Model Syncing
 ----
 
-By default this package will keep your Eloquent models in sync with Firebase.  That means that whenever `eloquent.saved: *` is fired, the model will be pushed to Firebase.  
+By default this package will keep your Eloquent models in sync with Firebase.  That means that whenever `eloquent.updated: *` is fired, the model will be pushed to Firebase.  
 
 This package will automatically look for 'id', '_id', and '$id' variables on the model so that Firebase paths are normalized like so:
 
