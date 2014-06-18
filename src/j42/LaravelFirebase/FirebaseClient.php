@@ -165,7 +165,7 @@ class FirebaseClient {
 
 		} elseif (is_string($token)) {
 			// Token is a string secret
-			$this->secret = $token;
+			$this->token = $token;
 		} else {
 			throw new \UnexpectedValueException('Token was not a valid configuration array (secret, options[, data]) or string');
 		}

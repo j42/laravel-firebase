@@ -25,25 +25,9 @@ class LaravelFirebaseServiceProvider extends ServiceProvider {
 		$this->package('j42/laravel-firebase', 'firebase');
 
 		// Register Eloquent Hooks
-		$sync = Config::get('database.connections.firebase.sync');
-		Event::listen('eloquent.updated: *', function($obj) {
-			$path = strtolower(get_class($obj)).'s';
-			$id   = \Firebase::getId($obj);
-			$data = $obj->toArray();
-			// Whitelist
-			if (!empty($obj->firebase)) {
-				$data = [];
-				foreach ($obj->getAttributes() as $key => $value) {
-					// Filter Attributes
-					if (in_array($key, $obj->firebase) !== false) $data[$key] = $value;
-				}
-			}
-			// Post if Allowed
-			if ($sync !== false || !empty($obj->firebase)) {
-				\Firebase::set('/'.$path.'/'.$id, $data);
-			}
-			return true;
-		}, 10);
+		Event::listen('eloquent.created: *', function($obj) { return $this->sync($obj); }, 10);
+		Event::listen('eloquent.updated: *', function($obj) { return $this->sync($obj); }, 10);
+		Event::listen('eloquent.deleted: *', function($obj) { return $this->delete($obj); }, 10);
 	}
 
 	/**
@@ -71,5 +55,43 @@ class LaravelFirebaseServiceProvider extends ServiceProvider {
 	public function provides() {
 		return ['firebase'];
 	}
+
+
+	// Process Sync Event
+	// Returns: true
+	// Arguments: (Model) $obj
+	private function sync($obj) {
+		$sync = Config::get('database.connections.firebase.sync');	// `sync` by Default (config)?
+		$path = strtolower(get_class($obj)).'s';					// plural collection name
+		$id   = \Firebase::getId($obj);								// object ID (extracted)
+		$data = $obj->toArray();
+		// Whitelist
+		if (!empty($obj->firebase)) {
+			$data = [];
+			foreach ($obj->getAttributes() as $key => $value) {
+				// Filter Attributes
+				if (in_array($key, $obj->firebase) !== false) $data[$key] = $value;
+			}
+		}
+		// Post if Allowed
+		if ($sync !== false || !empty($obj->firebase)) {
+			\Firebase::set('/'.$path.'/'.$id, $data);
+		}
+		return true;
+	}
+
+	// Process Delete Event
+	// Returns: true
+	// Arguments: (Model) $obj
+	private function delete($obj) {
+		$sync = Config::get('database.connections.firebase.sync');	// `sync` by Default (config)?
+		$path = strtolower(get_class($obj)).'s';					// plural collection name
+		$id   = \Firebase::getId($obj);								// object ID (extracted)
+		// Delete if Allowed
+		if ($sync !== false || !empty($obj->firebase)) {
+			\Firebase::delete('/'.$path.'/'.$id);
+		}
+	}
+
 
 }
