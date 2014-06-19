@@ -71,7 +71,7 @@ class LaravelFirebaseServiceProvider extends ServiceProvider {
 		// Whitelist
 		if (!empty($obj->firebase)) {
 			$data = [];
-			foreach ($obj->getAttributes() as $key => $value) {
+			foreach ($obj->toArray() as $key => $value) {
 				// Filter Attributes
 				if (in_array($key, $obj->firebase) !== false) $data[$key] = $value;
 			}
