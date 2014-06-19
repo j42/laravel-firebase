@@ -68,6 +68,15 @@ class FirebaseClient {
 	}
 
 
+	// Return: (json) Firebase Response
+	// Args: void
+	public function setWithPriority($path, Array $data, $priority) {
+		$data['.priority'] = $priority;
+		$url = $this->absolutePath($path);
+		// Return Response
+		return $this->write($url, $data, 'PUT');
+	}
+
 	// Return: (Guzzle) Firebase Response
 	// Args: (string) $path
 	public function delete($path) {
