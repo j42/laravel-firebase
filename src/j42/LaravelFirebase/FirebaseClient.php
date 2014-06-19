@@ -219,8 +219,10 @@ class FirebaseClient {
 	// Args: (Array) $data
 	public static function clean($data) {
 		$out = [];
+		$whitelist = ['.priority'];
 		// Begin recursive loop
 		foreach ($data as $key => $value) {
+			if (in_array($key, $whitelist)) continue;
 			$key = preg_replace('/[\.\#\$\/\[\]]/i', '', $key);
 			if (is_array($value) || is_object($value)) {
 				$out[$key] = self::clean($value);
