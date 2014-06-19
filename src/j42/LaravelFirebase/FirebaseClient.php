@@ -71,8 +71,8 @@ class FirebaseClient {
 	// Return: (json) Firebase Response
 	// Args: void
 	public function setWithPriority($path, Array $data, $priority) {
-		$data['.priority'] = $priority;
 		$url = $this->absolutePath($path);
+		$data['.priority'] = $priority;
 		// Return Response
 		return $this->write($url, $data, 'PUT');
 	}
@@ -222,8 +222,7 @@ class FirebaseClient {
 		$whitelist = ['.priority'];
 		// Begin recursive loop
 		foreach ($data as $key => $value) {
-			if (in_array($key, $whitelist)) continue;
-			$key = preg_replace('/[\.\#\$\/\[\]]/i', '', $key);
+			$key = (in_array($key, $whitelist) !== false) ? $key : preg_replace('/[\.\#\$\/\[\]]/i', '', $key);
 			if (is_array($value) || is_object($value)) {
 				$out[$key] = self::clean($value);
 			} else {
