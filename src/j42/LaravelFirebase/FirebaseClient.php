@@ -81,7 +81,8 @@ class FirebaseClient {
 	// Args: (string) $path
 	public function delete($path) {
 		// Process Request
-		$request  = $this->http->createRequest('DELETE', $path);
+		$url = $this->absolutePath($path);
+		$request  = $this->http->createRequest('DELETE', $url);
 		$response = $this->http->send($request);
 		return $this->validateResponse($response)->json();
 	}
