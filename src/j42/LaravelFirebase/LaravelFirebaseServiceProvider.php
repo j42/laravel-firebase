@@ -78,8 +78,8 @@ class LaravelFirebaseServiceProvider extends ServiceProvider {
 		} else $data = $obj->toArray();
 
 		// Post if Allowed
-		if (($sync !== false || !empty($obj->firebase)) &&
-			$obj->firebase !== false) {
+		if ((($sync !== false || !empty($obj->firebase)) && $obj->firebase !== false) ||
+			$obj->firebase === true) {
 			\Firebase::set('/'.$path.'/'.$id, $data);
 		}
 
