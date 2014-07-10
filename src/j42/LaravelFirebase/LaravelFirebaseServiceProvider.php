@@ -67,19 +67,21 @@ class LaravelFirebaseServiceProvider extends ServiceProvider {
 		$sync = Config::get('database.connections.firebase.sync');	// `sync` by Default (config)?
 		$path = strtolower(get_class($obj)).'s';					// plural collection name
 		$id   = \Firebase::getId($obj);								// object ID (extracted)
-		$data = $obj->toArray();
+
 		// Whitelist
-		if (!empty($obj->firebase)) {
+		if (!empty($obj->firebase) && is_array($obj->firebase)) {
 			$data = [];
 			foreach ($obj->toArray() as $key => $value) {
 				// Filter Attributes
 				if (in_array($key, $obj->firebase) !== false) $data[$key] = $value;
 			}
-		}
+		} else $data = $obj->toArray();
+
 		// Post if Allowed
 		if ($sync !== false || !empty($obj->firebase)) {
 			\Firebase::set('/'.$path.'/'.$id, $data);
 		}
+		
 		return true;
 	}
 
