@@ -39,7 +39,7 @@ class Token implements TokenInterface {
 		];
 
 		// Return JWT
-		return JWT::encode($claims, $this->secret, 'HS256');
+		return \JWT::encode($claims, $this->secret, 'HS256');
 
 	}
 
