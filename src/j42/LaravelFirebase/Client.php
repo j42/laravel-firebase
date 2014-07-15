@@ -215,11 +215,11 @@ class Client {
 
 
 	// [STA]
-	// Return: (Array) $data
-	// Args: (Array) $data
+	// Return: (mixed) $data
+	// Args: (mixed) $data
 	public static function clean($data) {
 		// String?
-		if (is_string($data)) return $data;
+		if (!is_array($data)) return $data;
 		// Needs a good scrubbing...
 		$out = [];
 		$whitelist = ['.priority'];
