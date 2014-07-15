@@ -3,7 +3,7 @@
 use \Illuminate\Database\Eloquent\Collection;
 use \Illuminate\Database\Eloquent\Model;
 
-class FirebaseClient {
+class Client {
 
 	# Properties
 	private $http;
@@ -52,8 +52,8 @@ class FirebaseClient {
 		switch ($func) {
 
 			case 'get':
-				// Read Data 
-				$requestType = 'GET'; 
+				// Read Data
+				$requestType = 'GET';
 				return $this->read($url, (isset($args[1]) ? $args[1] : false));
 			break;
 
@@ -130,7 +130,6 @@ class FirebaseClient {
 
 		// Sanity Checks
 		if (is_object($data)) $data = $data->toArray();
-		if (!is_array($data) && !is_object($data)) throw new \UnexpectedValueException('Invalid input type received');
 		if ($json === 'null') throw new \UnexpectedValueException('HTTP Error: Invalid request (invalid JSON)');
 
 		// Process Request
@@ -219,9 +218,12 @@ class FirebaseClient {
 	// Return: (Array) $data
 	// Args: (Array) $data
 	public static function clean($data) {
+		// String?
+		if (is_string($data)) return $data;
+		// Needs a good scrubbing...
 		$out = [];
 		$whitelist = ['.priority'];
-		// Begin recursive loop
+		// Recursive iterator to sanitize all keys
 		foreach ($data as $key => $value) {
 			$key = (in_array($key, $whitelist) !== false) ? $key : preg_replace('/[\.\#\$\/\[\]]/i', '', $key);
 			if (is_array($value) || is_object($value)) {

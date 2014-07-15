@@ -1,6 +1,6 @@
-<?php namespace J42\LaravelFirebase
+<?php namespace J42\LaravelFirebase;
 
-class FirebaseToken {
+class Token implements TokenInterface {
 
 	// Return: FirebaseToken
 	// Args: (string) $secret

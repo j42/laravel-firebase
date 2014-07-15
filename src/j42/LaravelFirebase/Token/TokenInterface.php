@@ -1,6 +1,6 @@
 <?php namespace J42\LaravelFirebase;
 
-interface FirebaseToken {
+interface TokenInterface {
 
 	# Properties
 	const FIREBASE_GENERAL = 500;

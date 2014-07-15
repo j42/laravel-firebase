@@ -12,7 +12,7 @@ class LaravelFirebaseServiceProvider extends ServiceProvider {
 	 *
 	 * @var bool
 	 */
-	protected $defer = false;
+	protected $defer = true;
 
 	/**
 	 * Bootstrap the application events.
@@ -22,7 +22,7 @@ class LaravelFirebaseServiceProvider extends ServiceProvider {
 	public function boot() {
 
 		// Register Package
-		$this->package('j42/laravel-firebase', 'firebase');
+		$this->package('j42/laravel-firebase', null, __DIR__.'/../../');
 
 		// Reference
 		$self = $this;
@@ -43,9 +43,14 @@ class LaravelFirebaseServiceProvider extends ServiceProvider {
 		// Get pseudo-connection from config
 		$config = Config::get('database.connections.firebase');
 
-		// Bind `firebase` to IoC
+		// Dependency Injection: Main Service
 		App::singleton('firebase', function($app) use ($config) {
-			return new FirebaseClient($config);
+			return new Client($config);
+		});
+
+		// Dependency Injection: Token Provider
+		App::bind('firebase.token', function($app) use ($config) {
+			return new Token($config['token']);
 		});
 
 	}
@@ -56,7 +61,7 @@ class LaravelFirebaseServiceProvider extends ServiceProvider {
 	 * @return array
 	 */
 	public function provides() {
-		return ['firebase'];
+		return ['firebase', 'firebase.token'];
 	}
 
 
