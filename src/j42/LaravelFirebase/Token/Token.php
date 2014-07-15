@@ -61,18 +61,16 @@ class Token implements TokenInterface {
 
 					// (DateTime || int) ?
 					switch(gettype($value)) {
-						case 'integer':
-							$claims[$code] = $value;
-							break;
+						case 'integer': $claims[$code] = $value;
 						case 'object':
 							if ($value instanceOf DateTime) $claims[$code] = $value->getTimestamp; else $this->error(503);
 							break;
 						default:
-							static::error(503);
+							$this->error(503);
 					}
 					break;
 
-				default: static::error(503);
+				default: $this->error(503);
 			}
 
 		}
