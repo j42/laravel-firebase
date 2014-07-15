@@ -55,7 +55,7 @@ class Client {
 				// Read Data
 				$requestType = 'GET';
 				return $this->read($url, (isset($args[1]) ? $args[1] : false));
-			break;
+				break;
 
 			case 'set': $requestType = 'PUT'; break;
 			case 'push': $requestType = 'POST'; break;
