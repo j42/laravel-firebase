@@ -22,7 +22,7 @@ class LaravelFirebaseServiceProvider extends ServiceProvider {
 	public function boot() {
 
 		// Register Package
-		$this->package('j42/laravel-firebase', null, __DIR__.'/../../');
+		$this->package('j42/laravel-firebase', null, __DIR__.'/../../../');
 
 		// Reference
 		$self = $this;

@@ -21,7 +21,7 @@
         "firebase/php-jwt": "@dev"
     },
     "autoload": {
-        "psr-4": {
+        "psr-0": {
             "J42\\LaravelFirebase\\": "src/j42/"
         }
     }
