@@ -22,10 +22,10 @@
     },
     "autoload": {
         "classmap": [
-            "src/j42/LaravelFirebase"
+            "src/j42"
         ],
         "psr-0": {
-            "J42\\LaravelFirebase": "src/j42/"
+            "J42\\LaravelFirebase": "src/j42"
         }
     }
 }
