@@ -25,7 +25,7 @@
             "src/j42/LaravelFirebase"
         ],
         "psr-0": {
-            "J42\\LaravelFirebase\\": "src/j42/"
+            "J42\\LaravelFirebase": "src/j42/"
         }
     }
 }
