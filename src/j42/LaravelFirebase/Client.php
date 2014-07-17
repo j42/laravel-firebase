@@ -223,9 +223,10 @@ class Client {
 		// Needs a good scrubbing...
 		$out = [];
 		$whitelist = ['.priority'];
-		// Recursive iterator to sanitize all keys
+		// Recursive iterator to sanitize all keys (and flatten object values)
 		foreach ($data as $key => $value) {
 			$key = (in_array($key, $whitelist) !== false) ? $key : preg_replace('/[\.\#\$\/\[\]]/i', '', $key);
+			if (is_object($value)) $value = $value->__toString();
 			if (is_array($value) || is_object($value)) {
 				$out[$key] = self::clean($value);
 			} else {
