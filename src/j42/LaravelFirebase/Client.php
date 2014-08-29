@@ -68,6 +68,8 @@ class Client {
 	}
 
 
+
+
 	// Return: (json) Firebase Response
 	// Args: void
 	public function setWithPriority($path, Array $data, $priority) {
@@ -131,6 +133,10 @@ class Client {
 		// Sanity Checks
 		if (is_object($data)) $data = $data->toArray();
 		if ($json === 'null') throw new \UnexpectedValueException('HTTP Error: Invalid request (invalid JSON)');
+
+		// Format Request
+		$cleaned  = self::clean($data);
+		if (!isset($cleaned['.priority'])) $cleaned['.priority'] = time();
 
 		// Process Request
 		$request  = $this->http->createRequest($method, $path, ['json' => self::clean($data)]);
