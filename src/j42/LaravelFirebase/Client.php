@@ -139,7 +139,7 @@ class Client {
 		if (!isset($cleaned['.priority'])) $cleaned['.priority'] = time();
 
 		// Process Request
-		$request  = $this->http->createRequest($method, $path, ['json' => self::clean($data)]);
+		$request  = $this->http->createRequest($method, $path, ['json' => $cleaned]);
 		$response = $this->http->send($request);
 
 		// Is Response Valid?
