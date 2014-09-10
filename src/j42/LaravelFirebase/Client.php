@@ -136,7 +136,9 @@ class Client {
 
 		// Format Request
 		$cleaned  = self::clean($data);
-		if (!isset($cleaned['.priority'])) $cleaned['.priority'] = time();
+		if (is_array($cleaned) && !isset($cleaned['.priority'])) {
+			$cleaned['.priority'] = time();
+		}
 
 		// Process Request
 		$request  = $this->http->createRequest($method, $path, ['json' => $cleaned]);
