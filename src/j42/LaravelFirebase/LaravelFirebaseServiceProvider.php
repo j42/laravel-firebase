@@ -21,9 +21,6 @@ class LaravelFirebaseServiceProvider extends ServiceProvider {
 	 */
 	public function boot() {
 
-		// Register Package
-		$this->package('j42/laravel-firebase', null, __DIR__.'/../../../');
-
 		// Reference
 		$self = $this;
 
@@ -39,6 +36,9 @@ class LaravelFirebaseServiceProvider extends ServiceProvider {
 	 * @return void
 	 */
 	public function register() {
+
+		// Register Package
+		$this->package('j42/laravel-firebase', null, __DIR__.'/../../../');
 
 		// Get pseudo-connection from config
 		$config = Config::get('database.connections.firebase');
