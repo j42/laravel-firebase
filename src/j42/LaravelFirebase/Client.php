@@ -127,12 +127,14 @@ class Client {
 	// Args: (string) $path, (Array || Object) $data, (string) $method
 	public function write($path, $data, $method = 'PUT') {
 
+		// Sanity Check
+		if (is_object($data)) $data = $data->toArray();
+
 		// JSON.stringify $data
 		$json = json_encode($data);
 
-		// Sanity Checks
-		if (is_object($data)) $data = $data->toArray();
-		if ($json === 'null') throw new \UnexpectedValueException('HTTP Error: Invalid request (invalid JSON)');
+		// Sanity Check
+		if ($json === 'null') throw new \UnexpectedValueException('Data Error: Invalid json/write request');
 
 		// Format Request
 		$cleaned  = self::clean($data);
