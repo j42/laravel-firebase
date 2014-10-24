@@ -252,14 +252,14 @@ class Client {
 	// Args: (Model) $obj
 	public static function getId($obj) {
 		// Valid Eloquent Model Inheritance?
-		if ($obj instanceOf \Model) {
-			if (empty($obj->getKey())) {
-				if (isset($obj['id'])) return $obj['id'];
-				if (isset($obj['_id'])) return $obj['_id'];
-				if (isset($obj['$id'])) return $obj['$id'];
-			} else return $obj->getKey();
+		if (method_exists($obj, 'getKey')) {
+			if (!empty($obj->getKey())) return $obj->getKey();
 		}
-		// Catch All
+		// Catch Generic
+		if (isset($obj['id'])) return $obj['id'];
+		if (isset($obj['_id'])) return $obj['_id'];
+		if (isset($obj['$id'])) return $obj['$id'];
+		// Else
 		throw new \UnexpectedValueException('Invalid model object received: no primary ID (id, _id, $id)');
  	}
 
