@@ -5,7 +5,7 @@ class Token implements TokenInterface {
 	// Return: FirebaseToken
 	// Args: (string) $secret
 	public function __construct($secret) {
-		if (!is_string($secret)) throw new UnexpectedValueException('Secret must be a string.');
+		if (!is_string($secret)) throw new \UnexpectedValueException('Secret must be a string.');
 		$this->secret = $secret;
 	}
 
@@ -14,13 +14,13 @@ class Token implements TokenInterface {
 	// Args: (Array) $data, (Array) $options
 	/*	$options
 			[admin] Bypass all security rules? (Default: false)
-		     *
+	*
 		    [debug] Enable debug output from security rules? (Default: false)
-		     *
+	*
 		    [expires] (int || DateTime) When token should expire
-		     *
+	*
 		    [notBefore] (int || DateTime) Only valid after this time
-     */
+    */
 	public function create(Array $data, Array $options = null) {
 
 		$json 			= json_encode($data);
@@ -65,14 +65,14 @@ class Token implements TokenInterface {
 							$claims[$code] = $value;
 							break;
 						case 'object':
-							if ($value instanceOf DateTime) $claims[$code] = $value->getTimestamp; else $this->error(503);
+							if ($value instanceOf \DateTime) $claims[$code] = $value->getTimestamp(); else $this->error(403);
 							break;
 						default:
-							static::error(503);
+							static::error(403);
 					}
 					break;
 
-				default: static::error(503);
+				default: static::error(403);
 			}
 
 		}

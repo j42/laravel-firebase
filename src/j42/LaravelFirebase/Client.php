@@ -252,8 +252,8 @@ class Client {
 	// Args: (Model) $obj
 	public static function getId($obj) {
 		// Valid Eloquent Model Inheritance?
-		if (method_exists($obj, 'getKey')) {
-			if (!empty($obj->getKey())) return $obj->getKey();
+		if (method_exists($obj, 'getKey') && $key = $obj->getKey()) {
+			if (!empty($key)) return $obj->getKey();
 		}
 		// Catch Generic
 		if (isset($obj['id'])) return $obj['id'];

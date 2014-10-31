@@ -3,8 +3,8 @@
 interface TokenInterface {
 
 	# Properties
-	const FIREBASE_GENERAL = 500;
-	const INVALID_OPTION = 503;
+	const FIREBASE_GENERAL = 403;
+	const INVALID_OPTION = 500;
 
 	# Methods
 	function __construct($secret);
