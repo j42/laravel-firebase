@@ -71,9 +71,11 @@ class LaravelFirebaseServiceProvider extends ServiceProvider {
 	}
 
 
-	// Process Sync Event
-	// Returns: true
-	// Arguments: (Model) $obj
+	/**
+	 * Sync handler
+	 * @param  object $obj
+	 * @return void
+	 */
 	private function sync($obj) {
 
 		$sync = (!empty(config('firebase')))
@@ -101,13 +103,20 @@ class LaravelFirebaseServiceProvider extends ServiceProvider {
 		return true;
 	}
 
-	// Process Delete Event
-	// Returns: true
-	// Arguments: (Model) $obj
+
+	/**
+	 * Delete handler
+	 * @param  object $obj
+	 * @return void
+	 */
 	private function delete($obj) {
-		$sync = config('database.connections.firebase.sync');	// `sync` by Default (config)?
+
+		$sync = (!empty(config('firebase')))
+				 ? config('firebase.sync')
+				 : config('database.connections.firebase.sync');	// `sync` by Default (config)?
 		$path = strtolower(get_class($obj)).'s';					// plural collection name
 		$id   = \Firebase::getId($obj);								// object ID (extracted)
+
 		// Delete if Allowed
 		if ($sync !== false || !empty($obj->firebase)) {
 			\Firebase::delete('/'.$path.'/'.$id);
