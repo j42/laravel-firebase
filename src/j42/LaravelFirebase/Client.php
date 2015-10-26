@@ -2,13 +2,13 @@
 
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
-use GuzzleHttp\Psr7\Request;
-use GuzzleHttp\Psr7\Response;
+use GuzzleHttp\Client;
 
 
 class Client {
 
 	# Properties
+	private $http;
 	private $timeout;
 	private $token;
 	private $host;
@@ -31,6 +31,9 @@ class Client {
 
 		// Set Timeout
 		$this->setTimeout($config['timeout'] ?: 10);
+
+		// Http client
+		$this->http = new Client();
 
 	}
 
@@ -82,7 +85,7 @@ class Client {
 	public function delete($path) {
 		// Process Request
 		$url = $this->absolutePath($path);
-		$request  = new Request('DELETE', $url);
+		$request  = $this->http->request('DELETE', $url, []);
 		return $this->validateResponse($request)->getBody();
 	}
 
@@ -92,7 +95,7 @@ class Client {
 	public function read($path, $eloquentCollection = false) {
 
 		// Process Request
-		$request  = new Request('GET', $path);
+		$request  = $this->http->request('GET', $path, []);
 		$response = $this->validateResponse($request)->getBody();
 
 		// Is Response Valid?
@@ -139,7 +142,7 @@ class Client {
 		}
 
 		// Process Request
-		$request = new Request($method, $path, ['json' => $cleaned]);
+		$request = $this->http->request($method, $path, ['json' => $cleaned]);
 
 		// Is Response Valid?
 		return $this->validateResponse($request)->getBody();
