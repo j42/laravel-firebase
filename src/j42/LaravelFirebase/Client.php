@@ -1,16 +1,17 @@
 <?php namespace J42\LaravelFirebase;
 
-use \Illuminate\Database\Eloquent\Collection;
-use \Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Model;
+use GuzzleHttp\Psr7\Request;
+use GuzzleHttp\Psr7\Response;
+
 
 class Client {
 
 	# Properties
-	private $http;
 	private $timeout;
 	private $token;
 	private $host;
-
 	private $passthrough = ['set','push','update','get'];
 
 
@@ -30,9 +31,6 @@ class Client {
 
 		// Set Timeout
 		$this->setTimeout($config['timeout'] ?: 10);
-
-		// Set Client
-		$this->http = new \GuzzleHttp\Client();
 
 	}
 
@@ -84,9 +82,8 @@ class Client {
 	public function delete($path) {
 		// Process Request
 		$url = $this->absolutePath($path);
-		$request  = $this->http->createRequest('DELETE', $url);
-		$response = $this->http->send($request);
-		return $this->validateResponse($response)->json();
+		$request  = new Request('DELETE', $url);
+		return $this->validateResponse($request)->getBody();
 	}
 
 
@@ -95,9 +92,8 @@ class Client {
 	public function read($path, $eloquentCollection = false) {
 
 		// Process Request
-		$request  = $this->http->createRequest('GET', $path);
-		$response = $this->http->send($request);
-		$response = $this->validateResponse($response)->json();
+		$request  = new Request('GET', $path);
+		$response = $this->validateResponse($request)->getBody();
 
 		// Is Response Valid?
 		return ($eloquentCollection) ? $this->makeCollection($response, $eloquentCollection) : $response;
@@ -143,11 +139,10 @@ class Client {
 		}
 
 		// Process Request
-		$request  = $this->http->createRequest($method, $path, ['json' => $cleaned]);
-		$response = $this->http->send($request);
+		$request = new Request($method, $path, ['json' => $cleaned]);
 
 		// Is Response Valid?
-		return $this->validateResponse($response)->json();
+		return $this->validateResponse($request)->getBody();
 	}
 
 

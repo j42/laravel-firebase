@@ -16,7 +16,7 @@
     ],
     "require": {
         "php": ">=5.4.0",
-        "guzzlehttp/guzzle": "~6",
+        "guzzlehttp/guzzle": "6.1.*",
         "firebase/php-jwt": "@dev"
     },
     "autoload": {
@@ -26,5 +26,10 @@
         "psr-0": {
             "J42\\LaravelFirebase": "src/j42/LaravelFirebase"
         }
-    }
+    },
+    "config": {
+        "preferred-install": "dist"
+    },
+    "minimum-stability": "stable",
+    "prefer-stable": true
 }
