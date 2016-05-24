@@ -2,7 +2,7 @@
 
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
-use GuzzleHttp\Client;
+use GuzzleHttp\Client as GuzzleClient;
 
 
 class Client {
@@ -33,7 +33,7 @@ class Client {
 		$this->setTimeout($config['timeout'] ?: 10);
 
 		// Http client
-		$this->http = new Client();
+		$this->http = new GuzzleClient();
 
 	}
 
