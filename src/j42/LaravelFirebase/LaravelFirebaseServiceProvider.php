@@ -50,7 +50,7 @@ class LaravelFirebaseServiceProvider extends ServiceProvider {
 
 		// Root provider
 		$this->app->singleton('firebase', function($app) use ($config) {
-			return new Client($config);
+			return new FirebaseClient($config);
 		});
 
 		// Token Provider

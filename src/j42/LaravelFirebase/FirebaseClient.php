@@ -1,11 +1,13 @@
-<?php namespace J42\LaravelFirebase;
+<?php
+
+namespace J42\LaravelFirebase;
 
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use GuzzleHttp\Client;
 
 
-class Client {
+class FirebaseClient {
 
 	# Properties
 	private $http;
