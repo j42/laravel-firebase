@@ -4,7 +4,7 @@ laravel-firebase
 A Firebase port for Laravel (4.2+)
 
 
-##Configuration
+## Configuration
 
 Install via composer.  If you have `minimum-stability` set to `stable`, you should add a `@beta` or `@dev` in order to use the `php-jwt` library (a dependency managed by firebase for generating JSON web token).
 
@@ -30,7 +30,7 @@ Access Tokens
 
 Finally, you should configure your firebase connection in the `config/database.php` array.  There are two ways you can define this:
 
-####Simple Access Token
+#### Simple Access Token
 
 ```php
 'firebase' => array(
@@ -41,7 +41,7 @@ Finally, you should configure your firebase connection in the `config/database.p
 )
 ```
 
-####Advanced: Request a JWT
+#### Advanced: Request a JWT
 
 This accepts any of the standard options allowed by the firebase [security rules](https://www.firebase.com/docs/security/security-rules.html) and will generate a JSON Web Token for more granular authentication (subject to auth security rules and expirations).
 
@@ -119,7 +119,7 @@ To disable this, please ensure `'sync' => false` in your database.connections.fi
 
 This works with any package that overwrites the default Eloquent model SO LONG AS it is configured to fire the appropriate `saved` and `updated` events.  At the moment it is tested with the base `Illuminate...Model` as well as the [Jenssegers MongoDB Eloquent Model](https://github.com/jenssegers/laravel-mongodb)
 
-####Syncing Models Individually
+#### Syncing Models Individually
 
 If you want to add a whitelist of properties to push to firebase automatically whenever a model is **updated**, you can do so by adding a whitelist of properties to any supported model.
 
@@ -135,9 +135,9 @@ class User extends Eloquent {
 ```
 
 
-##Advanced Use
+## Advanced Use
 
-#####Create a token manually
+##### Create a token manually
 
 ```php
 $FirebaseTokenGenerator = new J42\LaravelFirebase\FirebaseToken(FIREBASE_SECRET);
